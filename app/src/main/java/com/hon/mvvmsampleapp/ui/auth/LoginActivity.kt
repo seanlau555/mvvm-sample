@@ -1,13 +1,11 @@
 package com.hon.mvvmsampleapp.ui.auth
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.hon.mvvmsampleapp.R
+import com.hon.mvvmsampleapp.data.db.entities.User
 import com.hon.mvvmsampleapp.databinding.ActivityLoginBinding
 import com.hon.mvvmsampleapp.util.hide
 import com.hon.mvvmsampleapp.util.show
@@ -19,7 +17,8 @@ class LoginActivity : AppCompatActivity(), AuthListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val binding: ActivityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
+        val binding: ActivityLoginBinding =
+            DataBindingUtil.setContentView(this, R.layout.activity_login)
         val viewModel = ViewModelProviders.of(this).get(AuthViewModel::class.java)
 
         binding.viewmodel = viewModel
@@ -30,11 +29,13 @@ class LoginActivity : AppCompatActivity(), AuthListener {
         progress_bar.show()
     }
 
-    override fun onSuccess(loginResponse: LiveData<String>) {
-        loginResponse.observe(this, Observer {
-            progress_bar.hide()
-            toast(it)
-        })
+    override fun onSuccess(user: User) {
+        progress_bar.hide()
+        toast("${user.name} is logged in")
+//        loginResponse.observe(this, Observer {
+//            progress_bar.hide()
+//            toast(it)
+//        })
     }
 
     override fun onFailure(message: String) {
